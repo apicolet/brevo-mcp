@@ -1,0 +1,45 @@
+{
+  "name": "brevo-mcp",
+  "version": "1.0.0",
+  "description": "Multi-Channel Platform (MCP) for Brevo API integration with Claude",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "lint": "eslint src/**/*.ts",
+    "prepublish": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apicolet/brevo-mcp.git"
+  },
+  "keywords": [
+    "brevo",
+    "sendinblue",
+    "email",
+    "api",
+    "claude",
+    "mcp",
+    "typescript"
+  ],
+  "author": "Antoine Picolet",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/apicolet/brevo-mcp/issues"
+  },
+  "homepage": "https://github.com/apicolet/brevo-mcp#readme",
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.17",
+    "@typescript-eslint/eslint-plugin": "^7.0.1",
+    "@typescript-eslint/parser": "^7.0.1",
+    "eslint": "^8.56.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  }
+}
