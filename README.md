@@ -14,47 +14,35 @@ A Model Context Protocol (MCP) implementation for the Brevo API, designed for se
   - Manage custom attributes
   - Track contact activity
 
-## Installation
+## Usage with Claude Desktop
 
-```bash
-npm install @apicolet/brevo-mcp
-```
-
-## Configuration with Claude Desktop
-
-1. First, set up your Brevo API key as an environment variable:
-   ```bash
-   export BREVO_API_KEY=your-api-key-here
-   ```
-
-2. Install the MCP in your Claude Desktop configuration folder:
-   ```bash
-   cd ~/.claude/functions
-   npm install @apicolet/brevo-mcp
-   ```
-
-3. Add to your Claude Desktop configuration (typically `~/.claude/config.json`):
+1. Add this to your Claude Desktop configuration (typically `~/.config/claude-next/config.json`):
    ```json
    {
-     "functions": {
+     "MCPServers": {
        "brevo": {
-         "command": ["node", "node_modules/@apicolet/brevo-mcp/dist/server.js"]
+         "command": ["npx", "@apicolet/brevo-mcp"],
+         "config": {
+           "apiKey": "your-brevo-api-key-here"
+         }
        }
      }
    }
    ```
 
-4. Restart Claude Desktop to load the new configuration
+2. Restart Claude Desktop to load the configuration
 
-## Usage in Claude
+That's it! Now you can use Brevo functionality directly in your Claude conversations.
 
-Once configured, you can use the Brevo MCP in your conversations with Claude. Here are some examples:
+## Examples
+
+Here are some examples of what you can do with the Brevo MCP in Claude:
 
 ### Sending Emails
 
 ```typescript
 // Send a transactional email
-const result = await functions.brevo.send_email({
+const result = await mcp.brevo.send_email({
   to: [{ 
     email: "recipient@example.com",
     name: "John Doe"
@@ -68,10 +56,10 @@ const result = await functions.brevo.send_email({
 
 ```typescript
 // Get contact details
-const contact = await functions.brevo.get_contact("john@example.com");
+const contact = await mcp.brevo.get_contact("john@example.com");
 
 // Update contact attributes
-await functions.brevo.update_contact(contact.id, {
+await mcp.brevo.update_contact(contact.id, {
   attributes: {
     FIRSTNAME: "John",
     LASTNAME: "Doe",
@@ -126,4 +114,6 @@ MIT
 
 ## Security
 
-Never commit your Brevo API key to version control. Always use environment variables for sensitive configuration.
+- Keep your API keys safe and never commit them to version control
+- Use environment variables or the secure config section in Claude Desktop for sensitive data
+- The MCP server only handles communication between Claude and Brevo - no data is stored locally
