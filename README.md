@@ -1,4 +1,5 @@
 # Brevo MCP (Multi-Channel Platform)
+[![smithery badge](https://smithery.ai/badge/@apicolet/brevo-mcp)](https://smithery.ai/server/@apicolet/brevo-mcp)
 
 A TypeScript library for integrating Brevo (formerly Sendinblue) API with Claude and other applications. This MCP provides easy-to-use functions for managing contacts, sending transactional emails, and tracking email events.
 
@@ -24,8 +25,15 @@ A TypeScript library for integrating Brevo (formerly Sendinblue) API with Claude
 ```bash
 npm install brevo-mcp
 ```
+### Installing via Smithery
 
-## Configuration in Claude Desktop
+To install Brevo Multi-Channel Platform for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@apicolet/brevo-mcp):
+
+```bash
+npx -y @smithery/cli install @apicolet/brevo-mcp --client claude
+```
+
+### Configuration in Claude Desktop
 
 To use this MCP in Claude Desktop conversations, follow these steps:
 

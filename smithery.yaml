@@ -1,0 +1,24 @@
+# Smithery configuration file: https://smithery.ai/docs/config#smitheryyaml
+
+startCommand:
+  type: stdio
+  configSchema:
+    # JSON Schema defining the configuration options for the MCP.
+    type: object
+    required:
+      - apiKey
+      - defaultSenderEmail
+    properties:
+      apiKey:
+        type: string
+        description: API key for the Brevo (Sendinblue) API.
+      defaultSenderEmail:
+        type: string
+        description: Default sender email address for transactional emails.
+      defaultSenderName:
+        type: string
+        description: Optional default sender name for transactional emails.
+  commandFunction:
+    # A function that produces the CLI command to start the MCP on stdio.
+    |-
+    (config) => ({command: 'node', args: ['dist/index.js'], env: {API_KEY: config.apiKey, DEFAULT_SENDER_EMAIL: config.defaultSenderEmail, DEFAULT_SENDER_NAME: config.defaultSenderName || config.defaultSenderEmail.split('@')[0]}})
