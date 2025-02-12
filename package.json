@@ -1,9 +1,12 @@
 {
-  "name": "brevo-mcp",
+  "name": "@apicolet/brevo-mcp",
   "version": "1.0.0",
   "description": "Brevo MCP (Multi-Channel Platform) for Claude",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "bin": {
+    "brevo-mcp": "./dist/server.js"
+  },
   "scripts": {
     "build": "tsc",
     "test": "jest",
@@ -23,5 +26,25 @@
     "typescript": "^5.3.3",
     "jest": "^29.7.0",
     "@types/jest": "^29.5.12"
-  }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apicolet/brevo-mcp.git"
+  },
+  "keywords": [
+    "brevo",
+    "mcp",
+    "claude",
+    "email",
+    "contacts"
+  ],
+  "author": "Antoine Picolet",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/apicolet/brevo-mcp/issues"
+  },
+  "homepage": "https://github.com/apicolet/brevo-mcp#readme"
 }
