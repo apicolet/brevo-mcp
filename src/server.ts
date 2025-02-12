@@ -15,6 +15,10 @@ import { ContactSchema, EmailOptionsSchema } from './types';
 const ToolInputSchema = ToolSchema.shape.inputSchema;
 type ToolInput = z.infer<typeof ToolInputSchema>;
 
+interface ServerConfig {
+  apiKey: string;
+}
+
 // Server setup
 const server = new Server(
   {
@@ -28,13 +32,16 @@ const server = new Server(
   },
 );
 
-const apiKey = process.env.BREVO_API_KEY;
-if (!apiKey) {
-  console.error('Error: BREVO_API_KEY environment variable is required');
-  process.exit(1);
-}
+// Wait for config
+let brevo: BrevoClient;
 
-const brevo = new BrevoClient(apiKey);
+server.on('config', (config: ServerConfig) => {
+  if (!config.apiKey) {
+    console.error('Error: apiKey is required in config');
+    process.exit(1);
+  }
+  brevo = new BrevoClient(config.apiKey);
+});
 
 // Tool handlers
 server.setRequestHandler(ListToolsRequestSchema, async () => ({
@@ -58,6 +65,10 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
   try {
     const { name, arguments: args } = request.params;
+
+    if (!brevo) {
+      throw new Error('Server not configured');
+    }
 
     switch (name) {
       case 'get_contact': {
