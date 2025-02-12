@@ -1,58 +1,44 @@
 # Brevo MCP (Multi-Channel Platform)
 
-A TypeScript library for integrating Brevo (formerly Sendinblue) API with Claude and other applications. This MCP provides easy-to-use functions for managing contacts, sending transactional emails, and tracking email events.
+A Model Context Protocol (MCP) implementation for the Brevo API, designed for seamless integration with Claude and other AI assistants.
 
 ## Features
 
-- 📧 Transactional Email Management
-  - Send beautiful HTML emails
-  - Track email events (delivery, opens, clicks)
-  - Pre-built email templates
+- ✉️ Email Management
+  - Send transactional emails
+  - Track email delivery and events
+  - Beautiful email templates
   
 - 👥 Contact Management
   - Create and update contacts
   - Manage custom attributes
-  - Retrieve contact information
-  
-- 🎨 Beautiful Email Templates
-  - Gradient headers
-  - Modern design
-  - Customizable styles
+  - Track contact activity
 
 ## Installation
 
 ```bash
-npm install brevo-mcp
+npm install @apicolet/brevo-mcp
 ```
 
-## Configuration in Claude Desktop
+## Configuration with Claude Desktop
 
-To use this MCP in Claude Desktop conversations, follow these steps:
+1. First, set up your Brevo API key as an environment variable:
+   ```bash
+   export BREVO_API_KEY=your-api-key-here
+   ```
 
-1. Install the package in your Claude Desktop configuration directory:
+2. Install the MCP in your Claude Desktop configuration folder:
    ```bash
    cd ~/.claude/functions
-   npm install brevo-mcp
+   npm install @apicolet/brevo-mcp
    ```
 
-2. Create a configuration file (if not exists):
-   ```bash
-   touch ~/.claude/config.json
-   ```
-
-3. Add the Brevo MCP configuration to your config.json:
+3. Add to your Claude Desktop configuration (typically `~/.claude/config.json`):
    ```json
    {
      "functions": {
        "brevo": {
-         "path": "~/.claude/functions/node_modules/brevo-mcp",
-         "config": {
-           "apiKey": "YOUR_BREVO_API_KEY",
-           "defaultSender": {
-             "email": "your.validated@email.com",
-             "name": "Your Name"
-           }
-         }
+         "command": ["node", "node_modules/@apicolet/brevo-mcp/dist/server.js"]
        }
      }
    }
@@ -62,21 +48,19 @@ To use this MCP in Claude Desktop conversations, follow these steps:
 
 ## Usage in Claude
 
-Once configured, you can use the Brevo MCP in your Claude conversations. Here are some examples:
+Once configured, you can use the Brevo MCP in your conversations with Claude. Here are some examples:
 
-### Sending a Beautiful Email
+### Sending Emails
 
 ```typescript
-const brevo = new BrevoMCP(config.apiKey, config.defaultSender.email, config.defaultSender.name);
-
-await brevo.sendEmail({
-  to: [{ email: "recipient@example.com", name: "John Doe" }],
+// Send a transactional email
+const result = await functions.brevo.send_email({
+  to: [{ 
+    email: "recipient@example.com",
+    name: "John Doe"
+  }],
   subject: "Hello from Claude!",
-  htmlContent: BrevoMCP.getDefaultTemplate(
-    "Welcome!",
-    "This is a test email." + 
-    BrevoMCP.formatEmailSignature("Claude", "AI Assistant")
-  )
+  htmlContent: "<h1>Welcome!</h1><p>This is a test email.</p>"
 });
 ```
 
@@ -84,53 +68,55 @@ await brevo.sendEmail({
 
 ```typescript
 // Get contact details
-const contact = await brevo.getContact("john@example.com");
+const contact = await functions.brevo.get_contact("john@example.com");
 
-// Update contact information
-await brevo.updateContact(contact.id, {
+// Update contact attributes
+await functions.brevo.update_contact(contact.id, {
   attributes: {
     FIRSTNAME: "John",
     LASTNAME: "Doe",
-    LINKEDIN: "https://linkedin.com/in/johndoe"
+    COMPANY: "Acme Inc"
   }
 });
 ```
 
-### Creating Custom Attributes
+## Available Tools
 
-```typescript
-// Create a new custom attribute
-await brevo.createAttribute("LINKEDIN", "text");
+The MCP provides several tools that can be used in Claude:
 
-// Get all available attributes
-const attributes = await brevo.getAttributes();
+- `get_contact`: Retrieve contact details by email or ID
+- `update_contact`: Update contact attributes
+- `create_attribute`: Create new contact attributes
+- `send_email`: Send transactional emails
+- `get_email_events`: Track email delivery and engagement
+
+## Development
+
+### Setup
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/apicolet/brevo-mcp.git
+   cd brevo-mcp
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Build the project:
+   ```bash
+   npm run build
+   ```
+
+### Running Tests
+
+```bash
+npm test
 ```
 
-## API Reference
-
-### BrevoMCP Class
-
-#### Constructor
-```typescript
-constructor(apiKey: string, defaultSenderEmail: string, defaultSenderName?: string)
-```
-
-#### Methods
-
-- `getContact(identifier: string | number): Promise<BrevoContact>`
-- `updateContact(id: number, data: Partial<BrevoContact>): Promise<void>`
-- `createAttribute(name: string, type: 'text' | 'date' | 'float' | 'boolean'): Promise<void>`
-- `getAttributes(): Promise<ContactAttribute[]>`
-- `sendEmail(options: EmailOptions): Promise<{ messageId: string }>`
-- `getEmailEvents(messageId?: string, email?: string): Promise<any[]>`
-- `getSenders(): Promise<any>`
-
-#### Static Methods
-
-- `getDefaultTemplate(title: string, content: string, accentColor?: string): string`
-- `formatEmailSignature(name: string, title?: string, extra?: string): string`
-
-## Contributing
+### Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
@@ -140,4 +126,4 @@ MIT
 
 ## Security
 
-Never commit your Brevo API key to version control. Always use environment variables or secure configuration files.
+Never commit your Brevo API key to version control. Always use environment variables for sensitive configuration.
